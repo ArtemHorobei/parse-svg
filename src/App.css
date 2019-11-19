@@ -20,3 +20,7 @@
 .App-link {
   color: #09d3ac;
 }
+
+.selected > polygon[stroke], .selected > rect[stroke], .selected > path[stroke]  {
+    fill: red;
+}
