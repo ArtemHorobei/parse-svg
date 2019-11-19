@@ -9,10 +9,6 @@ function App() {
 
         <UploadSVG />
 
-        <div>Parse svg file</div>
-
-        <div>Form for edit/create svg file</div>
-
       </main>
     </div>
   );

@@ -21,24 +21,25 @@ function UploadSVG() {
     reader.readAsText(file);
 
     reader.onload = () => {
-      setCurrSVG({
-        asStringResult: reader.result,
-        name: file.name,
-        size: file.size,
-      });
+      setCurrSVG(reader.result);
     };
   };
 
-  const parseSVG = () => {
-    if (currSVG) {
-      const parser = new DOMParser();
+  if (!currSVG) return <div><input type="file" onChange={onFileChange} /></div>;
 
-      const svgDom = parser.parseFromString(currSVG.asStringResult, "application/xml");
-      const svgAttrs = getSvgAtts(svgDom);
-      const rootGroupAttrs = getRootGroupAtts(svgDom);
-      const subareas = getSubareas(svgDom);
+  const parser = new DOMParser();
 
-      return (
+  const svgDom = parser.parseFromString(currSVG, "application/xml");
+  const svgAttrs = getSvgAtts(svgDom);
+  const rootGroupAttrs = getRootGroupAtts(svgDom);
+  const subareas = getSubareas(svgDom);
+
+  return (
+    <div>
+      <div>
+        <input type="file" onChange={onFileChange} />
+      </div>
+      <div style={{ margin: 'auto', width: 500, height: 'auto' }}>
         <svg {...svgAttrs} width={null} height={null}>
           <g {...rootGroupAttrs}>
             {subareas.map(({ id, createMarkup, atts }) => (
@@ -55,20 +56,19 @@ function UploadSVG() {
             ))}
           </g>
         </svg>
-      );
-    }
-  };
+      </div>
 
-  return (
-    <div>
       <div>
-        <input type="file" onChange={onFileChange} />
+        {subareas.map(({ id, createMarkup, atts }) => (
+          <div>
+            <span>SVG id: {id}</span>
+            <div>
+              <span>Township names: </span>
+              <input type="text" />
+            </div>
+          </div>
+        ))}
       </div>
-      <div style={{ margin: 'auto', width: 500, height: 'auto' }}>
-        {parseSVG()}
-      </div>
-
-      <div>SVG id: {selectedId}</div>
     </div>
   );
 }
